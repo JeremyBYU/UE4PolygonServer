@@ -28,22 +28,23 @@ void APolygonServer::BeginPlay()
 void APolygonServer::DrawLinearRing(const std::vector<double> &ring, const std::array<int, 3> &color, const double &lifetime, const double &thickness)
 {
 	FColor color_f(color[0], color[1], color[2]);
-	auto vertices = ring.size() / 3;
-	if (vertices >= 3 && ring.size() % 3 == 0)
+	int vertices = static_cast<int>(ring.size() / 3);
+	if ((vertices >= 3) && (ring.size() % 3 == 0))
 	{
-		for (size_t i = 0; i < vertices - 1; i += 1)
+		for (int i = 0; i < vertices - 1; i++)
 		{
-			auto ii = 3 * i;
-			auto nii = 3 * (i + 1);
+			volatile int ii = 3 * i;
+			volatile int nii = 3 * (i + 1);
+
 			FVector start(ring[ii], ring[ii + 1], ring[ii + 2]);
 			FVector end(ring[nii], ring[nii + 1], ring[nii + 2]);
 			DrawDebugLine(GetWorld(), start, end, color_f, false, lifetime, 0, thickness);
 		}
 		// Close the Polygon
-		auto ii = 3 * (vertices - 1);
-		size_t nii = 0;
-		FVector start(ring[ii], ring[ii + 1], ring[ii + 2]);
-		FVector end(ring[nii], ring[nii + 1], ring[nii + 2]);
+		int ii_l = 3 * (vertices - 1);
+		int nii_f = 0;
+		FVector start(ring[ii_l], ring[ii_l + 1], ring[ii_l + 2]);
+		FVector end(ring[nii_f], ring[nii_f + 1], ring[nii_f + 2]);
 		DrawDebugLine(GetWorld(), start, end, color_f, false, lifetime, 0, thickness);
 
 	}
