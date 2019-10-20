@@ -3,6 +3,7 @@ Content
 .vs/
 *.pdb
 Plugins/PolygonServerPlugin/Source/PolygonServerPlugin/deps/rpclib
+Plugins/AirSim
 
 # Compiled Object files
 *.slo

@@ -31,7 +31,7 @@ void APolygonServer::DrawLinearRing(const std::vector<double> &ring, const std::
 	auto vertices = ring.size() / 3;
 	if (vertices >= 3 && ring.size() % 3 == 0)
 	{
-		for (auto i = 0; i < vertices - 1; i += 1)
+		for (size_t i = 0; i < vertices - 1; i += 1)
 		{
 			auto ii = 3 * i;
 			auto nii = 3 * (i + 1);
@@ -41,7 +41,7 @@ void APolygonServer::DrawLinearRing(const std::vector<double> &ring, const std::
 		}
 		// Close the Polygon
 		auto ii = 3 * (vertices - 1);
-		auto nii = 0;
+		size_t nii = 0;
 		FVector start(ring[ii], ring[ii + 1], ring[ii + 2]);
 		FVector end(ring[nii], ring[nii + 1], ring[nii + 2]);
 		DrawDebugLine(GetWorld(), start, end, color_f, false, lifetime, 0, thickness);
@@ -62,7 +62,14 @@ void APolygonServer::DrawPolygon(const DPCommand &cmd)
 	auto num_holes = cmd.holes.size();
 	for (auto i = 0; i < num_holes; i++)
 	{
-		DrawLinearRing(cmd.holes[i], cmd.hole_color, cmd.lifetime, cmd.thickness);
+		try
+		{
+			DrawLinearRing(cmd.holes[i], cmd.hole_color, cmd.lifetime, cmd.thickness);
+		}
+		catch (const std::exception&)
+		{
+			UE_LOG(LogTemp, Display, TEXT("Exception occured trying to draw Polygon"));
+		}
 	}
 }
 

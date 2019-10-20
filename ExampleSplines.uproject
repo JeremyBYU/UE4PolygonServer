@@ -1,20 +1,33 @@
 {
 	"FileVersion": 3,
 	"EngineAssociation": "4.20",
-	"Category": "",
+	"Category": "Research",
 	"Description": "",
 	"Enterprise": true,
 	"Modules": [
 		{
 			"Name": "ExampleSplines",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"AirSim",
+				"Engine",
+				"UnrealEd"
+			]
 		}
 	],
 	"Plugins": [
 		{
 			"Name": "PolygonServerPlugin",
 			"Enabled": true
+		},
+		{
+			"Name": "AirSim",
+			"Enabled": true
 		}
+	],
+	"TargetPlatforms": [
+		"MacNoEditor",
+		"WindowsNoEditor"
 	]
 }
