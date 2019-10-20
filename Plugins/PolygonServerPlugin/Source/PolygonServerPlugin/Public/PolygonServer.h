@@ -29,25 +29,21 @@ STRICT_MODE_OFF
 #ifndef check
 #define check(expr) (static_cast<void>((expr)))
 #endif
+STRICT_MODE_ON
 #include "PolygonServer.generated.h"
+
 
 struct DPCommand {
 	double lifetime = 0.0;
 	std::vector<double> shell;
 	std::vector<std::vector<double>> holes;
-	std::array<int,3> color{ {255, 0, 0} };
-	MSGPACK_DEFINE_MAP(lifetime, shell, holes, color);
+	std::array<int,3> shell_color{ {0, 255, 0} };
+	std::array<int, 3> hole_color{ {255, 0, 0} };
+	double thickness = 1.0;
+	MSGPACK_DEFINE_MAP(lifetime, shell, holes, shell_color, hole_color, thickness);
 
 	DPCommand()
 	{}
-};
-
-struct PointCloud
-{
-	// this map will hold the class mapping values (string label of class -> interger value)
-	std::vector<float> points;
-	// this holds the points received from the point cloud
-	std::unordered_map<std::string, int> class_mapping;
 };
 
 /**
@@ -59,20 +55,14 @@ class POLYGONSERVERPLUGIN_API APolygonServer : public ATriggerVolume
 
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Point Cloud Generation")
-		float resolution = 100.0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Point Cloud Generation", META = (Name = "Show Trace"))
-		bool showTrace = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Point Cloud Generation", META = (Name = "Record Classes"))
-		bool recordClasses = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Point Cloud Generation", META = (Name = "Save Directory"))
-		FString saveDirectory = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Point Cloud Generation", META = (Name = "Enabled"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polygon Server", META = (Name = "Enabled"))
 		bool enabled = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polygon Server", META = (Name = "Server IP"))
+		FString serverIP = "127.0.0.1";
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polygon Server", META = (Name = "Port"))
+		int port = 3000;
 
 
 
@@ -80,7 +70,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void DrawPolygon(const DPCommand &cmd);
-	void TimerElapsed();
+	void DrawLinearRing(const std::vector<double> &ring, const std::array<int, 3> &color, const double &lifetime, const double &thickness);
+	void CreateServer();
 
 private:
 	std::unique_ptr<rpc::server> server;
