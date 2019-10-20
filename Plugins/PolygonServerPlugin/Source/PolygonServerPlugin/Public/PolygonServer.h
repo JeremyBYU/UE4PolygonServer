@@ -13,7 +13,8 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
-#include "npy.h"
+
+
 #include "ScrictMode.hpp"
 STRICT_MODE_OFF
 
@@ -31,6 +32,7 @@ STRICT_MODE_OFF
 #endif
 STRICT_MODE_ON
 #include "PolygonServer.generated.h"
+
 
 
 struct DPCommand {

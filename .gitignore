@@ -2,7 +2,7 @@ Content
 # Visual Studio 2015 user specific files
 .vs/
 *.pdb
-Plugins/PolygonServerPlugin/Source/ThirdParty/rpclib
+Plugins/PolygonServerPlugin/Source/PolygonServerPlugin/deps/rpclib
 
 # Compiled Object files
 *.slo

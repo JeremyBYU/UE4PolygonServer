@@ -13,7 +13,7 @@ public class PolygonServerPlugin : ModuleRules
 
     public string ThirdPartyPath
     {
-        get { return Path.GetFullPath(Path.Combine(ModulePath, "../ThirdParty/")); }
+        get { return Path.GetFullPath(Path.Combine(ModulePath, "deps/")); }
     }
 	public PolygonServerPlugin(ReadOnlyTargetRules Target) : base(Target)
 	{
@@ -65,7 +65,7 @@ public class PolygonServerPlugin : ModuleRules
     }
 	private bool LoadAirSimDependency(ReadOnlyTargetRules Target, string LibName, string LibFileName)
     {
-        string LibrariesPath = ThirdPartyPath;
+        string LibrariesPath = Path.Combine(ThirdPartyPath, LibName, "lib");
         return AddLibDependency(LibName, LibrariesPath, LibFileName, Target, true);
     }
 
