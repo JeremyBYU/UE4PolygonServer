@@ -25,6 +25,19 @@ void APolygonServer::BeginPlay()
 	}
 }
 
+// Called when the game starts or when spawned
+void APolygonServer::Destroyed()
+{
+	Super::Destroyed();
+	if (server)
+	{
+		server->stop();
+		server.release();
+	}
+}
+
+
+
 void APolygonServer::DrawLinearRing(const std::vector<double> &ring, const std::array<int, 3> &color, const double &lifetime, const double &thickness)
 {
 	FColor color_f(color[0], color[1], color[2]);
@@ -84,9 +97,11 @@ void APolygonServer::CreateServer()
 	});
 	server->bind("drawPolygon", [&](const DPCommand& cmd) -> void {
 		UE_LOG(LogTemp, Display, TEXT("polygon command received"));
-		DrawPolygon(cmd);
+		FFunctionGraphTask::CreateAndDispatchWhenReady([=]
+		{
+			DrawPolygon(cmd);
+		}, TStatId(), nullptr, ENamedThreads::GameThread_Local);
 	});
 
-
-	server->async_run(2);   //2 threads
+	server->async_run(1);   //1 threads
 }

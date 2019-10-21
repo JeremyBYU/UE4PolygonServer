@@ -67,10 +67,10 @@ public:
 		int port = 3000;
 
 
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void Destroyed() override;
 	void DrawPolygon(const DPCommand &cmd);
 	void DrawLinearRing(const std::vector<double> &ring, const std::array<int, 3> &color, const double &lifetime, const double &thickness);
 	void CreateServer();
